@@ -1,0 +1,40 @@
+{
+  "pages": [
+    "pages/index/main",
+    "pages/shop/main",
+    "pages/news/main",
+    "pages/photo/main",
+    "pages/events/main",
+    "pages/userCenter/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "溪山行俱乐部",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#cccccc",
+    "selectedColor": "#000000",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [{
+        "pagePath": "pages/index/main",
+        "text": "首页",
+        "iconPath": "./assets/images/icon-index-select.png",
+        "selectedIconPath": "./assets/images/icon-index-select.png"
+      },
+      {
+        "pagePath": "pages/events/main",
+        "text": "活动",
+        "iconPath": "./assets/images/icon-huodong-select.png",
+        "selectedIconPath": "./assets/images/icon-huodong-select.png"
+      }, {
+        "pagePath": "pages/userCenter/main",
+        "text": "个人中心",
+        "iconPath": "./assets/images/icon-usercenter.png",
+        "selectedIconPath": "./assets/images/icon-usercenter.png"
+      }
+    ]
+  }
+}
