@@ -5,7 +5,9 @@
     "pages/news/main",
     "pages/photo/main",
     "pages/events/main",
-    "pages/userCenter/main"
+    "pages/userCenter/main",
+    "pages/myAct/main",
+    "pages/setting/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

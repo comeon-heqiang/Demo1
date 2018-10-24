@@ -18,11 +18,11 @@ export default {
   font-size: 14px;
 }
 view{
-  font-size: 14px;
-  color: #333;
+  font-size: 14px;  
 }
 page{
   background: #f6f6f6;
+  color: #333;
 }
 .mt20{
   margin-top: 20px;
