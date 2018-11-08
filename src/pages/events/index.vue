@@ -1,8 +1,8 @@
 <template>
     <div class="events">
         <ul>
-            <li v-for="(item,index) in eventsData" :key="index">
-                <a href="#">
+            <li v-for="(item,index) in eventsData" :key="index" @click="toArticle(item.id)">
+               
                     <img :src="item.thumb" alt="" class="thumb">
                     <template v-if="item.recommend===1">
                         <img src="../../assets/images/icon-tuijian.png" alt="" class="icon-tuijian">
@@ -30,7 +30,7 @@
                         </div>
 
                     </div>
-                </a>
+               
             </li>
         </ul>
     </div>
@@ -42,7 +42,7 @@ export default {
     return {
       text: ["未开始", "报名中", "满员", "已结束"],
       eventsData: [
-        {
+        {id:1,
           thumb:
             "http://img.saihuitong.com/2756/img/2843391/16339d7f800.jpg-cw480h320",
           title:
@@ -56,6 +56,7 @@ export default {
           recommend: 1 //1 推荐
         },
         {
+          id:2,
           thumb:
             "http://img.saihuitong.com/2756/img/2857257/165c6f325bf.jpg-cw480h320",
           title: "2018年10月21日 周日 17:00~19:00 黄龙体育中心羽毛球馆打羽毛球",
@@ -68,6 +69,7 @@ export default {
           recommend: 0 //1 推荐
         },
         {
+          id:3,
           thumb:
             "http://img.saihuitong.com/2756/img/2843391/16680cbb854.jpg-cw480h320",
           title: "10月21日 西山公园登高 龙坞 大斗山 小斗山 光明寺水库",
@@ -83,7 +85,14 @@ export default {
     };
   },
 
-  methods: {}
+  methods: {
+    // 跳转文章详情
+    toArticle(id){
+      wx.navigateTo({
+        url: '/pages/eventsDetail/main?eventId='+id
+      })
+    }
+  }
 };
 </script>
 

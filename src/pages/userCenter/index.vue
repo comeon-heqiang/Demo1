@@ -2,7 +2,7 @@
   <div class="user-center">
     <div class="user">
       <template v-if="isStatus">
-        <img src="../../assets/images/bg-user.jpg" alt="" class="bg-user">
+        <img src="/static/images/bg-user.jpg" alt="" class="bg-user">
         <div class="main">
           <img :src="userInfo.avatarUrl" alt="" class="user-pic">
           <div class="nick-name">
@@ -11,7 +11,7 @@
 
         </div>
         <a href="/pages/setting/main" class="setting">
-          <img src="../../assets/images/icon-setting.png" alt="">
+          <img src="/static/images/icon-setting.png" alt="">
           设置
         </a>
       </template>
@@ -44,12 +44,12 @@ export default {
       isStatus: true,
       Items: [
         {
-          iconPath: "../../assets/images/icon-photo2.png",
+          iconPath: "/static/images/icon-photo2.png",
           title: "我的相片",
           href: "/pages/myPhoto"
         },
         {
-          iconPath: "../../assets/images/icon-act.png",
+          iconPath: "/static/images/icon-act.png",
           title: "活动报名",
           href: "/pages/myAct/main"
         }

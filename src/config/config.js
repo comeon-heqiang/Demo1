@@ -1,3 +1,3 @@
 module.exports = {
-  serverPath: 'https:www.baidu.com'
+  serverPath: '/static/images/'
 }

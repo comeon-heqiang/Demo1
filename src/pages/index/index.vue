@@ -13,11 +13,11 @@
         </block>
       </swiper>
     </div>
-    <title-bar iconPath="../../assets/images/icon-huodong2.png" title="推荐活动" navTo="/pages/events/main"></title-bar>
+    <title-bar iconPath="/static/images/icon-huodong2.png" title="推荐活动" navTo="/pages/events/main" ></title-bar>
     <!-- 推荐活动 -->
     <div class="events pd mb20">
       <ul>
-        <li v-for="(item,index) in eventsData" :key="index">
+        <li v-for="(item,index) in eventsData" :key="index" @click="toEventsDetail(item.id)">
           <image :src="item.imgUrl" mode="widthFix" />
           <p class="title">
             {{item.title}}
@@ -28,35 +28,36 @@
         </li>
       </ul>
     </div>
-    <title-bar iconPath="../../assets/images/icon-wenzhang.png" title="最新文章" navTo="/pages/news/main"></title-bar>
+    <title-bar iconPath="/static/images/icon-wenzhang.png" title="最新文章" navTo="/pages/news/main"></title-bar>
     <!-- 最新文章 -->
     <div class="news mb20">
       <ul>
-        <li v-for="(item,index) in newsData" :key="index">
-          <a href="#">
-            <div class="main">
-              <h2>
-                {{item.title}}
-              </h2>
-              <p>
-                <span>
-                  {{item.author}}
-                </span>
-                <span>
-                  {{item.date}}
-                </span>
-                <span>
-                  <img src="../../assets/images/icon-yuedu.png" class="icon-yuedu">
-                  {{item.hits}}
-                </span>
-              </p>
-            </div>
-            <image :src="item.thumb" class="thumb" />
-          </a>
+        <li v-for="(item,index) in newsData" :key="index" @click="toNewsDetail(item.id)">
+
+          <div class="main">
+            <h2>
+              {{item.title}}
+            </h2>
+            <p>
+              <span>
+                {{item.author}}
+              </span>
+              <span>
+                {{item.date}}
+              </span>
+              <span>
+                <img src="/static/images/icon-yuedu.png" class="icon-yuedu">
+                {{item.hits}}
+              </span>
+            </p>
+          </div>
+          <image :src="item.thumb" class="thumb" />
+
         </li>
       </ul>
     </div>
-    <title-bar iconPath="../../assets/images/icon-xiangji.png" title="最美照片" navTo="/pages/photo/main"></title-bar>
+
+    <title-bar iconPath="/static/images/icon-xiangji.png" title="最美照片" navTo="/pages/photo/main"></title-bar>
     <!-- 最美照片 -->
     <div class="photo-list mb20">
       <ul>
@@ -73,17 +74,17 @@
         </li>
       </ul>
     </div>
-    <title-bar iconPath="../../assets/images/icon-guanyu.png" title="关于我们" navTo="/pages/photo/main"></title-bar>
+    <title-bar iconPath="/static/images/icon-guanyu.png" title="关于我们" navTo="/pages/aboutUs/main"></title-bar>
+
     <!-- 关于我们 -->
     <div class="about">
       <ul>
-        <li><img src="../../assets/images/icon-qq.png" alt="">QQ:3097951776</li>
-        <li><img src="../../assets/images/icon-weixin.png" alt="">微信：heqiangV587</li>
-        <li><img src="../../assets/images/icon-address.png" alt="">地址：湖北省仙桃市</li>
+        <li><img src="/static/images/icon-qq.png" alt="">QQ:3097951776</li>
+        <li><img src="/static/images/icon-weixin.png" alt="">微信：heqiangV587</li>
+        <li><img src="/static/images/icon-address.png" alt="">地址：湖北省仙桃市</li>
         <!-- <li><img :src="config+'/img/bd_logo1.png'" alt="">地址：湖北省仙桃市</li> -->
       </ul>
     </div>
-
   </div>
 </template>
 
@@ -125,18 +126,21 @@ export default {
       ],
       eventsData: [
         {
+          id: 1,
           imgUrl:
             "http://img.saihuitong.com/2756/img/2843391/15ec15d0502.jpg-cw480h320",
           title: "11月10日 杭州 毅行 自由组队 重在参与 最美杭州体验过程",
           price: "免费"
         },
         {
+          id: 2,
           imgUrl:
             "http://img.saihuitong.com/2756/img/2843391/16680cbb854.jpg-cw480h320",
           title: "10月21日 西山公园登高 龙坞 大斗山 小斗山 光明寺水库",
           price: "免费"
         },
         {
+          id: 3,
           imgUrl:
             "http://img.saihuitong.com/2756/img/2852592/165ef8d827a.jpg-cw480h320",
           title:
@@ -144,6 +148,7 @@ export default {
           price: "5800"
         },
         {
+          id: 4,
           imgUrl:
             "http://img.saihuitong.com/2756/img/2857257/165c6f325bf.jpg-cw480h320",
           title: "2018年10月21日 周日 17:00~19:00 黄龙体育中心羽毛球馆打羽毛球",
@@ -152,6 +157,7 @@ export default {
       ],
       newsData: [
         {
+          id: 11,
           title: "户外登山技巧，祝你轻松爬山（二）",
           author: "时光",
           date: "2018-10-18",
@@ -160,6 +166,7 @@ export default {
             "http://img.saihuitong.com/2756/richtext/2852592/165e643d1ea.jpg-cw240h180"
         },
         {
+          id: 22,
           title: "户外登山技巧，祝你轻松爬山（一）",
           author: "时光",
           date: "2018-10-18",
@@ -168,6 +175,7 @@ export default {
             "http://img.saihuitong.com/2756/richtext/2852592/165e643d1ea.jpg-cw240h180"
         },
         {
+          id: 33,
           title: "山野医学 | 处理毒蛇咬伤，弄不好就截肢了！",
           author: "时光",
           date: "2018-10-18",
@@ -203,6 +211,18 @@ export default {
         imgHeight = e.mp.detail.height,
         radio = imgWidth / imgHeight;
       this.bannerSwiperHeight = res.windowWidth / radio;
+    },
+    // 跳转文章详情
+    toNewsDetail(id) {
+      wx.navigateTo({
+        url: "/pages/newsDetail/main?newsId=" + id
+      });
+    },
+    // 跳转活动详情
+    toEventsDetail(id) {
+      wx.navigateTo({
+        url: "/pages/eventsDetail/main?eventId=" + id
+      });
     }
   }
 };
@@ -268,11 +288,10 @@ export default {
   background: #fff;
   ul {
     li {
-      a {
-        display: flex;
-        padding: 16px 12px;
-        border-bottom: 1px solid #e4e4e4;
-      }
+      display: flex;
+      padding: 16px 12px;
+      border-bottom: 1px solid #e4e4e4;
+
       .thumb {
         width: 120px;
         height: 90px;

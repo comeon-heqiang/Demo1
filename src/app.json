@@ -3,11 +3,15 @@
     "pages/index/main",
     "pages/shop/main",
     "pages/news/main",
+    "pages/newsDetail/main",
     "pages/photo/main",
+    "pages/photoDetail/main",
     "pages/events/main",
+    "pages/eventsDetail/main",    
     "pages/userCenter/main",
     "pages/myAct/main",
-    "pages/setting/main"
+    "pages/setting/main",
+    "pages/aboutUs/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -16,27 +20,27 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "color": "#cccccc",
-    "selectedColor": "#000000",
+    "color": "#999",
+    "selectedColor": "#299fff",
     "backgroundColor": "#ffffff",
-    "borderStyle": "black",
+    "borderStyle": "black",    
     "list": [{
-        "pagePath": "pages/index/main",
-        "text": "首页",
-        "iconPath": "./assets/images/icon-index-select.png",
-        "selectedIconPath": "./assets/images/icon-index-select.png"
-      },
-      {
-        "pagePath": "pages/events/main",
-        "text": "活动",
-        "iconPath": "./assets/images/icon-huodong-select.png",
-        "selectedIconPath": "./assets/images/icon-huodong-select.png"
-      }, {
-        "pagePath": "pages/userCenter/main",
-        "text": "个人中心",
-        "iconPath": "./assets/images/icon-usercenter.png",
-        "selectedIconPath": "./assets/images/icon-usercenter.png"
-      }
-    ]
+      "pagePath": "pages/index/main",
+      "text": "首页",
+      "iconPath": "static/images/icon-index4.png",
+      "selectedIconPath": "static/images/icon-index4.png"
+    },
+    {
+      "pagePath": "pages/events/main",
+      "text": "活动",
+      "iconPath": "static/images/icon-huodong-select.png",
+      "selectedIconPath": "static/images/icon-huodong-select.png"
+    },
+    {
+      "pagePath": "pages/userCenter/main",
+      "text": "个人中心",
+      "iconPath": "static/images/icon-usercenter.png",
+      "selectedIconPath": "static/images/icon-usercenter.png"
+    }]
   }
 }
