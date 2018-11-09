@@ -17,7 +17,16 @@ module.exports = {
         pathRewrite: {
           '^/apis': '' //需要rewrite重写的,
         }
+      },
+
+      'randomPic':{
+        target:'https://bing.ioliu.cn/ranking',
+        changeOrigin:true,
+        pathRewrite:{
+          '^/randomPic':''
+        }
       }
+      
     },
 
     // Various Dev Server settings
