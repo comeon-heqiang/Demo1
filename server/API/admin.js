@@ -50,4 +50,18 @@ router.post('/login', async (ctx) => {
     ctx.body = info.error('用户名密码错误')
   }
 })
+router.post("/adminList", async (ctx) => {
+  let adminModel = mongoose.model('admin');
+  try {
+    let result = await adminModel.find({});
+    if (result) {
+      ctx.body = info.success(result);
+    } else {
+      ctx.body = info.success('无数据')
+    }
+  } catch (err) {
+    ctx.body = info.error(err)
+  }
+
+})
 module.exports = router;

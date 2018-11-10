@@ -1,11 +1,12 @@
 .login-main {
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  padding-top: 10%;
+  box-sizing: border-box;
   // justify-content: center;
   align-items: center;
   background: url(../assets/images/bg-login2.jpg) no-repeat 0 0 / 100%;
-
   // &::after {
   //   content: '';
   //   position: fixed;
@@ -20,7 +21,7 @@
 
   .login {
     width: 300px;
-    margin: 10% auto 0;
+    margin: 0 auto 0;
 
     h2 {
       font-weight: normal;
@@ -57,6 +58,19 @@
       box-shadow: 0 15px 30px 0 rgba(255, 255, 255, .25) inset, 0 2px 7px 0 rgba(0, 0, 0, .2);
       outline: none;
     }
+
+    .code {
+      display: flex;
+      align-items: center;
+      margin-top: 25px;
+      justify-content: space-between;
+
+      input {
+        margin-top: 0px;
+        margin-right: 20px;
+      }
+    }
+
 
   }
 

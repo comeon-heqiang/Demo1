@@ -1,0 +1,31 @@
+.container-header {
+  height: 60px;
+  line-height: 60px;
+  background: #20a0ff;
+  color: #fff;
+  font-size: 16px;
+
+  .logo {
+    text-align: center;
+    border-right: 1px solid hsla(62, 77%, 76%, .3);
+  }
+}
+
+.container-main {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.main-left {
+  position: relative;
+  margin: 0;
+  padding-left: 0;
+  background-color: #eef1f6;
+
+  .el-menu {
+    background-color: inherit;
+  }
+}
