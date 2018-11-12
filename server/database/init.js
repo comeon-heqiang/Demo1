@@ -9,7 +9,9 @@ exports.initSchemas = () => {
   glob.sync(resolve(__dirname, './Schema/', '**/*.js')).forEach(require);
 }
 exports.connect = () => {
-  mongoose.connect(db);
+  mongoose.connect(db, {
+    useNewUrlParser: true
+  });
   return new Promise((resolve, reject) => {
     let connCount = 0; //连接次数
     // 连接出错后重连 重连次数超过3次，则抛出错误
@@ -20,7 +22,7 @@ exports.connect = () => {
         throw ('连接出错，请人工处理');
       } else {
         connCount++;
-        mongoose.connect(db);
+        mongoose.connect(db,{useNewUrlParser:true});
       }
     })
     // 连接断开
@@ -31,7 +33,7 @@ exports.connect = () => {
         throw ('连接断开，请人工处理');
       } else {
         connCount++;
-        mongoose.connect(db);
+        mongoose.connect(db,{useNewUrlParser:true});
       }
     })
     //连接成功

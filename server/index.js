@@ -12,6 +12,7 @@ const {
   await connect();
   initSchemas();
 })();
+
 // 装载路由
 app.use(bodyparser())
 app.use(cors({
@@ -19,7 +20,9 @@ app.use(cors({
   credentials: true
 }));
 let admin = require('./API/admin');
+let events=require('./API/events')
 router.use('/admin', admin.routes());
+router.use('/events', events.routes());
 app.use(router.routes())
 app.use(router.allowedMethods())
 

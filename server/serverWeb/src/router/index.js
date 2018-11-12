@@ -5,6 +5,7 @@ import Index from '@/pages/index'
 import Login from '@/pages/login'
 import Register from '@/pages/register'
 import adminList from '@/pages/admin'
+import Events from '@/pages/events'
 Vue.use(Router);
 
 export default new Router({
@@ -21,11 +22,11 @@ export default new Router({
         component: adminList
       },
       {
-        path: '/admin2',
-        name: 'admin',
-        navName: '管理员列表2',
+        path: '/events',
+        name: 'events',
+        navName: '活动列表',
         iconCls: 'icon-geren',
-        component: adminList
+        component: Events
       }
     ]
   }, {

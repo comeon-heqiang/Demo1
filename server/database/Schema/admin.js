@@ -7,8 +7,8 @@ const adminSchema = new Schema({
   password: String,
   createDate: String,
   lastLoginDate: {
-    type: Date,
-    default:Date.now
+    type:String,
+    default:''
   },
   popedom: {
     type: Array,

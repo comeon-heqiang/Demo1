@@ -9,6 +9,9 @@
     text-align: center;
     border-right: 1px solid hsla(62, 77%, 76%, .3);
   }
+  .header-right{
+    padding: 0 30px;
+  }
 }
 
 .container-main {
@@ -17,6 +20,7 @@
   left: 0;
   bottom: 0;
   width: 100%;
+  
 }
 
 .main-left {
@@ -28,4 +32,7 @@
   .el-menu {
     background-color: inherit;
   }
+}
+.main-right{
+  padding: 30px;
 }
