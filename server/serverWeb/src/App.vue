@@ -29,4 +29,8 @@ html,body{
 .height100{
   height: 100%;
 }
+.el-pagination{
+  text-align: center;
+  margin-top: 30px;
+}
 </style>

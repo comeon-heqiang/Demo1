@@ -9,15 +9,14 @@ const eventsSchema = new Schema({
   endTime: { //结束时间
     type: String,
     default: ''
-  },
+  },  
   price: {
     type: Number,
     default: 0
   }, //价格
   startAddress: String, //开始地点
   endAddress: String, //结束地点
-  leader: String, //领队
-  leaderTel: Number, //领队联系方式
+  leaderId:String, //领队编号
   places: Number, //名额
   register: {
     type: Array,
@@ -25,14 +24,15 @@ const eventsSchema = new Schema({
   }, //报名用户
   thumb: Array, //活动轮播图
   iselite: {
-    type: Number,
-    default: 0
+    type: Boolean,
+    default: true
   }, //是否推荐
+  adminName:'',//添加活动管理员名称
   addTime: {
     type: String,
     default: new Date()
   }, //添加时间
-  updateTime: String, //更新时间
+  updateTime: String //更新时间
 
 })
 mongoose.model("events", eventsSchema)

@@ -11,15 +11,14 @@
       <el-table-column prop="title" label="活动名称"></el-table-column>
       <el-table-column prop="startAddress" label="活动地点"></el-table-column>
       <el-table-column prop="startTime" label="活动时间"></el-table-column>
-      <el-table-column prop="leader" label="领队"></el-table-column>
+      <el-table-column prop="leaderId" label="领队"></el-table-column>
       <el-table-column prop="register" label="报名"></el-table-column>
       <el-table-column prop="intro" label="活动简介"></el-table-column>
       <el-table-column prop="addTime" label="创建时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="delUser(scope.row)" type="danger">删除</el-button>
-          <!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+          <el-button size="mini" type="primary" @click="editEvent(scope.row)">编辑</el-button>
+          <el-button size="mini" @click="delEvent(scope.row)" type="danger">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -29,36 +28,38 @@
       </el-pagination>
     </div>
     <!-- 添加活动弹窗 -->
-    <el-dialog title="添加活动" :visible.sync="addEventVisible">
-      <el-form style="width:750px">
-        <el-form-item label="活动名称" :label-width="labelWidth">
-          <el-input placeholder="请填写活动名称"></el-input>
+    <el-dialog title="添加活动" :visible.sync="addEventVisible" width="40%">
+      <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm"> -->
+      <el-form :model="ruleForm" ref="ruleForm">
+        <el-form-item label="活动名称" :label-width="labelWidth" prop="title">
+          <el-input placeholder="请填写活动名称" v-model="ruleForm.title"></el-input>
         </el-form-item>
-        <el-form-item label="活动简介" :label-width="labelWidth">
-          <el-input placeholder="请填写活动简介"></el-input>
+        <el-form-item label="活动简介" :label-width="labelWidth" prop="intro">
+          <el-input placeholder="请填写活动简介" v-model="ruleForm.intro"></el-input>
         </el-form-item>
-        <el-form-item label="活动日期" :label-width="labelWidth">
-          <el-date-picker type="datetimerange" v-model="eventDate" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+        <el-form-item label="活动日期" :label-width="labelWidth" prop="time">
+          <el-date-picker type="datetimerange" v-model="ruleForm.time" format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="dateChange"></el-date-picker>
+          <!-- <el-date-picker type="date" v-model="ruleForm.time"  @change="dateChange"></el-date-picker> -->
         </el-form-item>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="开始地点" :label-width="labelWidth">
-              <el-input placeholder="活动开始地点"></el-input>
+            <el-form-item label="开始地点" :label-width="labelWidth" prop="startAddress">
+              <el-input placeholder="活动开始地点" v-model="ruleForm.startAddress"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="结束地点" :label-width="labelWidth">
-              <el-input placeholder="活动结束地点"></el-input>
+            <el-form-item label="结束地点" :label-width="labelWidth" prop="endAddress">
+              <el-input placeholder="活动结束地点" v-model="ruleForm.endAddress"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="10">
-            <el-form-item label="领队" :label-width="labelWidth">
+            <el-form-item label="领队" :label-width="labelWidth" prop="leaderId">
               <!-- <el-input placeholder="领队"></el-input> -->
-              <el-select placeholder="请选择" v-model="selLeader">
-                <el-option v-for="item in leader" clearable :key="item.value" :label="item.value" :value="item.value" class="leader">
-                  <span>{{item.value}}</span>
+              <el-select placeholder="请选择" v-model="ruleForm.leaderId" @change="leaderChange">
+                <el-option v-for="item in leaderList" clearable :key="item.name" :label="item.name" :value="item._id" class="leader">
+                  <span>{{item.name}}</span>
                   <span>
                     {{item.tel}}
                   </span>
@@ -70,28 +71,30 @@
         </el-form-item> -->
           </el-col>
           <el-col :span="8">
-            <el-form-item label="人数" :label-width="labelWidth">
-              <el-input placeholder="活动人数"></el-input>
+            <el-form-item label="人数" :label-width="labelWidth" prop="places">
+              <el-input placeholder="活动人数" v-model.number="ruleForm.places"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-
-        <el-form-item label="是否推荐" :label-width="labelWidth">
-          <el-switch v-model="iselite" active-text="是" inactive-text="否"></el-switch>
+        <el-form-item label="活动价格" :label-width="labelWidth">
+          <el-input placeholder="活动价格" v-model.number="ruleForm.price"></el-input>
+        </el-form-item>
+        <el-form-item label="是否推荐" :label-width="labelWidth" prop="iselite">
+          <el-switch v-model="ruleForm.iselite" active-text="是" inactive-text="否"></el-switch>
         </el-form-item>
 
         <el-form-item label="活动图片" :label-width="labelWidth">
-          <el-upload :action="uploadUrl" list-type="picture-card" ref="upload" accept=".jpg,.jpeg,.png,.JPG,.JPEG" name="file" :file-list="fileList" :limit="5" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :auto-upload="false" :multipl="true" :on-success="uploadSuccess" :before-upload="beforeAvatarUpload">
+          <el-upload :action="uploadUrl" :data="ruleForm" list-type="picture-card" ref="upload" accept=".jpg,.jpeg,.png,.JPG,.JPEG" name="file" :file-list="fileList" :limit="5" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :auto-upload="false" :multiple="true" :on-success="uploadSuccess" :before-upload="beforeAvatarUpload">
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="内容" :label-width="labelWidth">
-          <el-input placeholder="内容"></el-input>
+        <el-form-item label="内容" :label-width="labelWidth" prop="content">
+          <el-input placeholder="内容" v-model="ruleForm.content"></el-input>
         </el-form-item>
         <el-form-item label="" :label-width="labelWidth">
-          <el-button type="primary" @click="submitEvent">立即创建</el-button>
-          <el-button type="danger" @click="canelEvent">取消</el-button>
+          <el-button type="primary" @click="submitEvent('ruleForm')">立即创建</el-button>
+          <el-button type="danger" @click="canelEvent('ruleForm')">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -108,33 +111,84 @@ export default {
       page: 1,
       sort: 0,
       count: 0,
-      addEventVisible: true,
+      addEventVisible: false,
       labelWidth: "80px",
-      eventDate: "",
-      iselite: true,
-      selLeader: "",
-      dialogImageUrl: "",
-      dialogVisible: false,
-      leader: [
-        {
-          value: "咖啡渣",
-
-          tel: "15826888343"
-        },
-        {
-          value: "大懒虫",
-
-          tel: "123456789"
-        }
-      ],
+      leaderList: [],
       uploadUrl: "http://localhost:3000/events/upload", //图片上传地址
-      fileList: [] //上传文件列表
+      fileList: [], //上传文件列表
+      ruleForm: {
+        title: "",
+        intro: "",
+        content: "",
+        time: "",
+        price: 0,
+        startAddress: "",
+        endAddress: "",
+        leaderId: "",
+        places: 0,
+        iselite: true
+      },
+      rules: {
+        title: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
+        intro: [{ required: true, message: "请输入活动简介", trigger: "blur" }],
+        time: [
+          {
+            required: true,
+            message: "请选择活动日期",
+            trigger: "change"
+          }
+        ],
+        startAddress: [
+          {
+            required: true,
+            message: "请输入活动开始地点",
+            triggertrigger: "blur"
+          }
+        ],
+        endAddress: [
+          { required: true, message: "请输入活动结束地点", trigger: "blur" }
+        ],
+        leaderId: [
+          { required: true, message: "请选择领队", trigger: "change" }
+        ],
+        places: [
+          {
+            type: "number",
+            required: true,
+            message: "必须为数字",
+            trigger: "blur"
+          }
+        ],
+        price: [
+          {
+            type: Number,
+            required: true,
+            message: "请输入价格",
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
   created() {
     this.getEventsList();
+    this.getLeaderList();
   },
   methods: {
+    // 获取领队列表
+    getLeaderList() {
+      axios({
+        url: url.leaderList
+      })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.leaderList = res.data.message;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     // 获取活动列表
     getEventsList() {
       axios({
@@ -147,7 +201,6 @@ export default {
       })
         .then(res => {
           if (res.data.code == 200 && res.data.message) {
-            console.log(res);
             this.eventData = res.data.message;
             this.count = res.data.count;
           } else if (res.data.code == 200) {
@@ -174,7 +227,11 @@ export default {
       this.page = val;
       this.getAdminList();
     },
-    delUser(id) {
+    leaderChange(e) {
+      console.log(e);
+    },
+    // 删除活动
+    delEvent(id) {
       this.$confirm("确定删除此活动？删除后不可恢复", "提示", {
         confirmButtonText: "确定",
         calcelButtonText: "取消"
@@ -182,7 +239,7 @@ export default {
         .then(res => {
           axios({
             method: "POST",
-            url: url.delAdmin,
+            url: url.delEvent,
             data: {
               id: id
             }
@@ -193,7 +250,7 @@ export default {
                   type: "success",
                   message: "删除成功"
                 });
-                this.getAdminList();
+                this.getEventsList();
               } else {
                 this.$message.error("删除失败");
               }
@@ -204,37 +261,118 @@ export default {
             });
         })
         .catch(err => {
-          this.$message({
-            type: "warning",
-            message: "操作取消"
-          });
+          // this.$message({
+          //   type: "warning",
+          //   message: "操作取消"
+          // });
         });
     },
+    // 编辑活动
+    editEvent(item) {
+      this.addEventVisible = true;
+      axios({
+        method: "POST",
+        url: url.editEvent,
+        data: {
+          id: item._id
+        }
+      })
+        .then(response => {
+          let res = response.data;
+          console.log(res.message.thumb);
+          var reg=/(\/upload\/+).+$/;
+          if (res.code == 200) {            
+            this.ruleForm = res.message;
+            this.ruleForm.time = [res.message.startTime, res.message.endTime];
+            let array=[];
+            for(var i=0;i<res.message.thumb.length;i++){
+
+              // console.log(res.message.thumb);
+              // this.fileList = res.message.thumb;
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.error("编辑失败");
+        });
+    },
+    // 提交事件
+    submitEvent(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          new Promise((resovle, reject) => {
+            this.$refs.upload.submit();
+            resovle();
+          }).then(res => {
+            axios({
+              method: "POST",
+              url: url.addEvent,
+              data: {
+                event: this.ruleForm
+              }
+            })
+              .then(res => {
+                if (res.data.code == 200) {
+                  this.$message({
+                    type: "success",
+                    message: "添加成功"
+                  });
+                  this.getEventsList();
+                  this.$refs[formName].resetFields();
+                  this.fileList = [];
+                  this.addEventVisible = false;
+                } else {
+                  this.$message.error("添加失败");
+                }
+              })
+              .catch(err => {
+                console.log(err);
+                this.$message.error("添加错误");
+              });
+          });
+        } else {
+          this.$message.error("请按规则填写");
+          return false;
+        }
+      });
+    },
     // 取消创建活动
-    canelEvent() {
+    canelEvent(formName) {
       this.$confirm("确定取消?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消"
       })
         .then(res => {
+          this.$refs[formName].resetFields();
           this.addEventVisible = false;
         })
         .catch(err => {});
     },
     // 点击文件列表中已上传的文件时的钩子
     handlePictureCardPreview() {
-      console.log(1);
+      console.log("1");
     },
     // 文件上传成功时的钩子
-    uploadSuccess() {},
+    uploadSuccess(response, file, fileList) {
+      this.$message({
+        type: "success",
+        message: "图片上传成功"
+      });
+    },
     // 图片上传之前
-    beforeAvatarUpload() {},
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isLt2M;
+    },
     // 文件列表移除文件时的钩子
     handleRemove() {},
-    // 提交事件
-    submitEvent() {
-      this.$refs.upload.submit();
-    }
+
+    // 日期确定
+    dateChange(e) {}
   }
 };
 </script>
