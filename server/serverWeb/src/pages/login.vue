@@ -43,6 +43,13 @@ export default {
   },
   created() {
     // this.getBgPic();
+    if (localStorage.getItem("userName")) {
+      this.$message({
+        type: "success",
+        message: "您已登录"
+      });
+        this.$router.push("/");      
+    }
   },
   mounted() {
     this.identifyCode = "";
@@ -82,6 +89,7 @@ export default {
               type: "success",
               message: "登录成功"
             });
+            localStorage.setItem("userName", this.username);
             setTimeout(() => {
               this.$router.push("/");
             }, 500);

@@ -34,5 +34,5 @@ app.use(router.allowedMethods())
 // 加载中间路由件
 
 app.listen(3000, () => {
-  console.log("端口启动成功")
+  console.log("你的服务器在3000端口裸奔！")
 })

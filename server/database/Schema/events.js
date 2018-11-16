@@ -33,6 +33,5 @@ const eventsSchema = new Schema({
     default: new Date()
   }, //添加时间
   updateTime: String //更新时间
-
 })
 mongoose.model("events", eventsSchema)

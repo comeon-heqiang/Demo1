@@ -8,6 +8,7 @@ let url = {
   addEvent: serverUrl + 'events/addEvent', //添加活动
   delEvent: serverUrl + 'events/delEvent', //删除活动
   editEvent: serverUrl + 'events/editEvent', //编辑活动
+  updateEvent: serverUrl + 'events/updateEvent', //更新活动
   leaderList: serverUrl + 'leader', //领队
 }
 

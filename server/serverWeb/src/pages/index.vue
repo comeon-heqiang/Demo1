@@ -7,6 +7,9 @@
                 </el-col>
                 <el-col :span="20" class="header-right">
                     后台管理系统
+                    <div class="loginout" @click="loginOut">
+                        退出登录
+                    </div>
                 </el-col>
             </el-row>
         </div>
@@ -31,6 +34,18 @@
 export default {
   data() {
     return {};
+  },
+  methods: {
+    loginOut() {
+      localStorage.removeItem("userName");
+      this.$message({
+        type: "success",
+        message: "退出登录成功"
+      });
+      setTimeout(() => {
+        this.$router.push("/login");
+      }, 500);
+    }
   }
 };
 </script>

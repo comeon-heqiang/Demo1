@@ -84,8 +84,23 @@
         </el-form-item>
 
         <el-form-item label="活动图片" :label-width="labelWidth" prop="fileList">
+          <!-- <el-upload :action="uploadUrl" 
+          list-type="picture-card" 
+          ref="upload" 
+          accept=".jpg,.jpeg,.png,.JPG,.JPEG"
+           name="file" 
+           :file-list="fileList" 
+           :limit="5" 
+           :on-preview="handlePictureCardPreview" 
+           :on-remove="handleRemove" 
+           :auto-upload="false" 
+           :multiple="true" 
+           :on-success="uploadSuccess" 
+           :before-upload="beforeAvatarUpload">
+            <i class="el-icon-plus"></i>
+          </el-upload> -->
 
-          <el-upload action="" :http-request="handleFile" list-type="picture-card" ref="upload" accept=".jpg,.jpeg,.png,.JPG,.JPEG" name="file" :file-list="fileList" :limit="5" :on-preview="handlePictureCardPreview" :auto-upload="false" :multiple="true" :before-upload="beforeAvatarUpload" :before-remove="beforeRemove">
+          <el-upload :action="uploadUrl" list-type="picture-card" ref="upload" accept=".jpg,.jpeg,.png,.JPG,.JPEG" name="file" :file-list="fileList" :limit="5" :on-preview="handlePictureCardPreview" :auto-upload="false" :multiple="true" :before-upload="beforeAvatarUpload" :on-success="uploadSuccess">
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
@@ -94,8 +109,8 @@
           <el-input placeholder="内容" v-model="ruleForm.content"></el-input>
         </el-form-item>
         <el-form-item label="" :label-width="labelWidth">
-          <el-button type="primary" @click="upload('ruleForm')" v-if="isCreate">立即创建</el-button>
-          <el-button type="primary" @click="upload('ruleForm')" v-else>立即更新</el-button>
+          <el-button type="primary" @click="submitEvent('ruleForm')" v-if="isCreate">立即创建</el-button>
+          <el-button type="primary" @click="updateEvent('ruleForm')" v-else>立即更新</el-button>
           <el-button type="danger" @click="canelEvent('ruleForm')">取消</el-button>
         </el-form-item>
       </el-form>
@@ -182,70 +197,6 @@ export default {
     this.getLeaderList();
   },
   methods: {
-    handleFile(response) {
-      this.fileList.push(response.file);
-    },
-    beforeRemove(file, fileList) {
-      // console.log(file);
-      // console.log(this.fileList);
-      var index = this.fileList.indexOf(file);
-      this.fileList.splice(index, 1);
-    },
-    upload(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          let form = this.$refs["ruleForm"].$el;
-          let formData = new FormData(form);
-          for (var i in this.ruleForm) {
-            formData.append(i, this.ruleForm[i]);
-          }
-          formData.append("file", this.fileList);
-          if (this.isCreate) {
-            axios
-              .post("http://localhost:3000/events/upload2", formData)
-              .then(response => {
-                if (response.data.code == 200) {
-                  this.$message({
-                    type: "success",
-                    message: "文章添加成功"
-                  });
-                  this.getEventsList();
-                  this.addEventVisible = false;
-                  this.fileList = [];
-                  this.$refs["upload"].clearFiles();
-                  this.$refs["ruleForm"].resetFields();
-                }
-              })
-              .catch(function(error) {
-                // console.log(error)
-              });
-          } else {                        
-            axios
-              .post("http://localhost:3000/events/update", formData)
-              .then(response => {
-                console.log(response);
-                if (response.data.code == 200) {
-                  this.$message({
-                    type: "success",
-                    message: "文章更新成功"
-                  });
-                  this.getEventsList();
-                  this.addEventVisible = false;
-                  this.fileList = [];
-                  this.$refs["upload"].clearFiles();
-                  this.$refs["ruleForm"].resetFields();
-                }
-              })
-              .catch(function(error) {
-                console.log(error);
-              });
-          }
-        } else {
-          this.$message.error("请按规则填写");
-          return false;
-        }
-      });
-    },
     // 获取领队列表
     getLeaderList() {
       axios({
@@ -346,9 +297,15 @@ export default {
             let arr = [];
             if (res.message.thumb) {
               res.message.thumb.forEach(item => {
+                // item = {
+                //   name: item
+                //     .match(/(\/upload\/+).+$/)[0]
+                //     .replace("/upload/", ""),
+                //   url: item
+                // };
                 item = {
-                  name: item,
-                  url: "http://localhost:3000/upload/" + item
+                  name: item.filename,
+                  url: "http://localhost:3000/upload/" + item.filename
                 };
                 arr.push(item);
               });
@@ -372,6 +329,18 @@ export default {
         }
       });
     },
+
+    // 提交事件
+    submitEvent(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$refs.upload.submit();        
+        } else {
+          this.$message.error("请按规则填写");
+          return false;
+        }
+      });
+    },
     // 取消创建活动
     canelEvent(formName) {
       this.$confirm("确定取消?", "提示", {
@@ -388,6 +357,84 @@ export default {
     },
     // 点击文件列表中已上传的文件时的钩子
     handlePictureCardPreview() {},
+    // 文件上传成功时的钩子
+    uploadSuccess(response, file, fileList) {   
+      this.$message({
+        type: "success",
+        message: "图片上传成功"
+      });       
+      if (this.isCreate) {
+        fileList.forEach(item=>{
+          console.log(item.response.filename)
+          // this.ruleForm.fileList.push(item.response.filename)
+        })
+        console.log(this.ruleForm.fileList)
+        return;
+        axios({
+          method: "POST",
+          url: url.addEvent,
+          data: {
+            event: this.ruleForm
+          }
+        })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$message({
+                type: "success",
+                message: "添加成功"
+              });
+              this.getEventsList();
+              this.$refs["ruleForm"].resetFields();
+              this.ruleForm.fileList = [];
+              this.fileList = [];
+              this.addEventVisible = false;
+            } else {
+              this.$message.error("添加失败");
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            this.$message.error("添加错误");
+          });
+      } 
+      //else {
+      //   this.ruleForm.fileList = [];
+      //   fileList.forEach(item => {
+      //     if (!item.response.filename) {
+      //       this.ruleForm.fileList.push(item.name);
+      //     } else {
+      //       this.ruleForm.fileList.push(item.response.filename);
+      //     }
+      //   });
+      //   console.log(this.ruleForm.fileList);
+      //   axios({
+      //     method: "POST",
+      //     url: url.updateEvent,
+      //     data: {
+      //       event: this.ruleForm
+      //     }
+      //   })
+      //     .then(res => {
+      //       if (res.data.code == 200) {
+      //         this.$message({
+      //           type: "success",
+      //           message: "更新成功"
+      //         });
+      //         this.getEventsList();
+      //         this.$refs[formName].resetFields();
+      //         this.ruleForm.fileList = [];
+
+      //         this.addEventVisible = false;
+      //       } else {
+      //         this.$message.error("更新失败");
+      //       }
+      //     })
+      //     .catch(err => {
+      //       console.log(err);
+      //       this.$message.error("更新错误");
+      //     });
+      // }
+    },
     // 图片上传之前
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
@@ -396,6 +443,9 @@ export default {
       }
       return isLt2M;
     },
+    // 文件列表移除文件时的钩子
+    handleRemove() {},
+
     // 日期确定
     dateChange(e) {},
     addEventButton() {
