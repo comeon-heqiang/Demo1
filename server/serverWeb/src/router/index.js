@@ -6,6 +6,7 @@ import Login from '@/pages/login'
 import Register from '@/pages/register'
 import adminList from '@/pages/admin'
 import Events from '@/pages/events'
+import Leader from "@/pages/Leader"
 Vue.use(Router);
 
 export default new Router({
@@ -27,6 +28,11 @@ export default new Router({
         navName: '活动列表',
         iconCls: 'icon-geren',
         component: Events
+      },{
+        path:"/leader",
+        navName:"领队列表",
+        name:"Leader",
+        component:Leader
       }
     ]
   }, {

@@ -10,6 +10,10 @@ let url = {
   editEvent: serverUrl + 'events/editEvent', //编辑活动
   updateEvent: serverUrl + 'events/updateEvent', //更新活动
   leaderList: serverUrl + 'leader', //领队
+  addLeader:serverUrl+"leader/addLeader", //添加领队
+  delLeader:serverUrl+"leader/delLeader", //删除领队
+  editLeader:serverUrl+"leader/editLeader", //编辑领队
+  updateLeader:serverUrl+"leader/updateLeader", //编辑领队
 }
 
 module.exports = url;

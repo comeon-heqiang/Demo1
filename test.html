@@ -47,6 +47,15 @@
 </head>
 
 <body>
+  <div class="filtering-of-sensitive-words">
+    <h3>敏感词过滤</h3>
+    <p>替换前</p>
+    <textarea name="before" id="" cols="30" rows="10"></textarea>
+    <input type="button" value="确定" id="input1">
+    <p>替换后</p>
+    <textarea name="after" id="" cols="30" rows="10"></textarea>
+  </div>
+
   <article class="container">
     <div class="center">
       <div class="inner">双飞翼布局</div>
@@ -54,8 +63,8 @@
     <div class="left"></div>
     <div class="right"></div>
   </article>
+
   <script>
-    
     var name = '1';
     var b = {
       name: "2",
@@ -63,8 +72,27 @@
         console.log(this.name);
       }
     }
-    b.sayName.call(null);
-    b.sayName();
+    // b.sayName.call(null);
+    // b.sayName();
+    window.onload = function () {
+      var aT = document.getElementsByTagName("textarea");
+      var oInput = document.getElementById("input1");
+
+      var re = /非诚|中国船|监视之下/g;
+
+      oInput.onclick = function () {
+        // 一律单个替换： aT[1].value = at[0].value.replace(re, "*");
+        // 多个替换：
+        aT[1].value = aT[0].value.replace(re, function (str) {
+          console.log(str)
+          var result = "";
+          for (var i = 0; i < str.length; i++) {
+            result += "*";
+          }
+          return result;
+        });
+      }
+    }
 
   </script>
 </body>

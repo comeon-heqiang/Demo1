@@ -11,7 +11,15 @@
       <el-table-column prop="title" label="活动名称"></el-table-column>
       <el-table-column prop="startAddress" label="活动地点"></el-table-column>
       <el-table-column prop="startTime" label="活动时间"></el-table-column>
-      <el-table-column prop="leaderId" label="领队"></el-table-column>
+      <el-table-column label="领队">
+        <template slot-scope="scope">
+          <div v-for="(item,index) in leaderList" :key="index" v-if="item._id==scope.row.leaderId">
+            {{item.name}}
+          </div>
+          <!-- {{scope.row.leaderId}} -->
+        </template>
+
+      </el-table-column>
       <el-table-column prop="register" label="报名"></el-table-column>
       <el-table-column prop="intro" label="活动简介"></el-table-column>
       <el-table-column prop="addTime" label="创建时间"></el-table-column>
@@ -38,7 +46,7 @@
           <el-input placeholder="请填写活动简介" v-model="ruleForm.intro"></el-input>
         </el-form-item>
         <el-form-item label="活动日期" :label-width="labelWidth" prop="time">
-          <el-date-picker type="datetimerange" v-model="ruleForm.time" format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="dateChange"></el-date-picker>
+          <el-date-picker type="datetimerange" v-model="ruleForm.time" format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="dateChange" :picker-options="pickerOptions1"></el-date-picker>
           <!-- <el-date-picker type="date" v-model="ruleForm.time"  @change="dateChange"></el-date-picker> -->
         </el-form-item>
         <el-row>
@@ -106,8 +114,7 @@
 <script>
 import axios from "axios";
 import url from "../serverConfig.js";
-import { resolve } from "url";
-import { promises } from "fs";
+
 export default {
   data() {
     return {
@@ -174,6 +181,11 @@ export default {
             trigger: "blur"
           }
         ]
+      },
+      pickerOptions1: {
+        disabledDate(time) {
+          return time.getTime() < Date.now();
+        }
       }
     };
   },
@@ -200,46 +212,30 @@ export default {
             formData.append(i, this.ruleForm[i]);
           }
           formData.append("file", this.fileList);
-          if (this.isCreate) {
-            axios
-              .post("http://localhost:3000/events/upload2", formData)
-              .then(response => {
-                if (response.data.code == 200) {
-                  this.$message({
-                    type: "success",
-                    message: "文章添加成功"
-                  });
-                  this.getEventsList();
-                  this.addEventVisible = false;
-                  this.fileList = [];
-                  this.$refs["upload"].clearFiles();
-                  this.$refs["ruleForm"].resetFields();
-                }
-              })
-              .catch(function(error) {
-                // console.log(error)
-              });
-          } else {                        
-            axios
-              .post("http://localhost:3000/events/update", formData)
-              .then(response => {
-                console.log(response);
-                if (response.data.code == 200) {
-                  this.$message({
-                    type: "success",
-                    message: "文章更新成功"
-                  });
-                  this.getEventsList();
-                  this.addEventVisible = false;
-                  this.fileList = [];
-                  this.$refs["upload"].clearFiles();
-                  this.$refs["ruleForm"].resetFields();
-                }
-              })
-              .catch(function(error) {
-                console.log(error);
-              });
+          let ajaxUrl = "http://localhost:3000/events/upload2";
+          let message = "文章添加成功";
+          if (!this.isCreate) {
+            ajaxUrl = "http://localhost:3000/events/update";
+            message = "文章更新成功";
           }
+          axios
+            .post(ajaxUrl, formData)
+            .then(response => {
+              if (response.data.code == 200) {
+                this.$message({
+                  type: "success",
+                  message: message
+                });
+                this.getEventsList();
+                this.addEventVisible = false;
+                this.fileList = [];
+                this.$refs["upload"].clearFiles();
+                this.$refs["ruleForm"].resetFields();
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
         } else {
           this.$message.error("请按规则填写");
           return false;
@@ -288,7 +284,7 @@ export default {
           this.$message.error(err);
         });
     },
-
+    
     // 删除活动
     delEvent(id) {
       this.$confirm("确定删除此活动？删除后不可恢复", "提示", {
@@ -379,9 +375,9 @@ export default {
         cancelButtonText: "取消"
       })
         .then(res => {
-          this.$refs[formName].resetFields();
+          this.$refs["upload"].clearFiles();
+          this.$refs["ruleForm"].resetFields();
           this.fileList = [];
-          this.ruleForm.fileList = [];
           this.addEventVisible = false;
         })
         .catch(err => {});

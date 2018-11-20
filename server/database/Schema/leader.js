@@ -5,13 +5,14 @@ const leaderSchema=new Schema({
     id:Schema.Types.ObjectId,
     name:String,
     tel:Number,
-    age:{
-        type:Number,
-        default:18
+    birthDate:{
+        type:String,
+        default:""
     },
     pic:String,
     createDate:String,
     updateDate:String,
-    intro:String
+    intro:String,
+    content:String
 })
 mongoose.model('leader',leaderSchema);

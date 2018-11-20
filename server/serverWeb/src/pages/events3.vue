@@ -11,7 +11,9 @@
       <el-table-column prop="title" label="活动名称"></el-table-column>
       <el-table-column prop="startAddress" label="活动地点"></el-table-column>
       <el-table-column prop="startTime" label="活动时间"></el-table-column>
-      <el-table-column prop="leaderId" label="领队"></el-table-column>
+      <el-table-column prop="leaderId" label="领队">
+        
+      </el-table-column>
       <el-table-column prop="register" label="报名"></el-table-column>
       <el-table-column prop="intro" label="活动简介"></el-table-column>
       <el-table-column prop="addTime" label="创建时间"></el-table-column>

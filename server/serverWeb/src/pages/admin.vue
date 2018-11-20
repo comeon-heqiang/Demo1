@@ -76,6 +76,10 @@ export default {
       this.getAdminList();
     },
     delUser(id) {
+      if(this.adminData.length<2){
+        this.$message.error("不可全部删除");
+        return;
+      }
       this.$confirm("确定删除此用户？删除后不可恢复", "提示", {
         confirmButtonText: "确定",
         calcelButtonText: "取消"

@@ -198,10 +198,9 @@ router.post('/update', upload.any("file"), async (ctx) => {
   let body = ctx.req.body;
   let time = body.time.split(',');
   let fileList = [];
-  console.log(JSON.parse(body.file))
+  
   if (body.file) {
-    body.file.split(',').forEach(item => {
-      
+    body.file.split(',').forEach(item => {      
       fileList.push(item.name)
     })
   }
@@ -210,7 +209,7 @@ router.post('/update', upload.any("file"), async (ctx) => {
       fileList.push(item.filename)
     })
   }
-  return ;
+  
   let eventModel = mongoose.model('events');
   try {
     await eventModel.updateOne({
