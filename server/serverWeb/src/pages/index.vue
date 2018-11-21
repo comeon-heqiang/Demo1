@@ -17,7 +17,6 @@
             <el-col :span="4" class="main-left height100">
                 <el-menu :default-active="$router.path" router class="height100">
                     <el-submenu v-for="(item,index) in $router.options.routes" :index="index+''" :key="index.path" v-if="!item.hidden">
-                        <!-- {{item.name}} -->
                         <el-menu-item v-for="(child,childIndex) in item.children" :index="child.path" :key="childIndex">
                             {{child.navName}}
                         </el-menu-item>
@@ -25,7 +24,7 @@
                 </el-menu>
             </el-col>
             <el-col :span="20" class="main-right height100">
-                <router-view></router-view>
+                <router-view :key="key"></router-view>
             </el-col>
         </el-row>
     </div>
@@ -35,6 +34,11 @@ export default {
   data() {
     return {};
   },
+  computed: {
+    key() {
+        return this.$route.name !== undefined? this.$route.name + +new Date(): this.$route + +new Date()
+    }
+ },
   methods: {
     loginOut() {
       localStorage.removeItem("userName");

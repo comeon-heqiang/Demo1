@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" @click="addLeaderButton">添加领队</el-button>
-     <div id="editor"></div>
+    <!-- <div id="editor"></div> -->
     <el-table :data="leaderData" :border="true" :stripe="true" class="leader-table">
       <el-table-column type="index"></el-table-column>
       <el-table-column label="名称" prop='name'></el-table-column>
@@ -23,11 +23,11 @@
           <el-button type="primary" size="small" @click="editLeader(scope.row._id)">编辑</el-button>
           <el-button type="danger" size="small" @click="delLeader(scope.row._id)">删除</el-button>
         </template>
-       
+
       </el-table-column>
     </el-table>
     <!-- 添加领队 -->
-    <el-dialog title="添加领队" :visible.sync="addLeaderVisible" width="40%" :close-on-click-modal="false">
+    <!-- <el-dialog title="添加领队" :visible.sync="addLeaderVisible" width="40%" :close-on-click-modal="false">
       <el-form :model="leaderForm" ref="leaderForm">
         <el-form-item label="姓名" :label-width="labelWidth" prop="name">
           <el-input placeholder="请输入领队名称" v-model="leaderForm.name"></el-input>
@@ -41,15 +41,17 @@
         <el-form-item label="出生日期" :label-width="labelWidth" prop="birthDate">
           <el-date-picker type="date" v-model="leaderForm.birthDate" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" placeholder="选择领队出生日期" :picker-options="pickerOptions1"></el-date-picker>
         </el-form-item>
-
+        <el-form-item label="地区" :label-width="labelWidth">
+          <el-cascader :options="areaOptions" v-model="leaderForm.addressCode" @change="areaChange"></el-cascader>
+        </el-form-item>
         <el-form-item label="领队图片" :label-width="labelWidth">
           <el-upload action="" :http-request="handleFile" list-type="picture-card" ref="upload" accept=".jpg,.jpeg,.png,.JPG,.JPEG" name="file" :file-list="fileList" :limit="1" :on-preview="handlePictureCardPreview" :auto-upload="false" :multiple="true" :before-upload="beforeAvatarUpload" :before-remove="beforeRemove">
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
         <el-form-item label="详细介绍" :label-width="labelWidth">
-          <!-- <editor-bar></editor-bar> -->
-          
+        
+          <div id="editor"></div>
         </el-form-item>
         <el-form-item label="" :label-width="labelWidth">
           <el-button type="primary" @click="submit()" v-if="isCreate">立即创建</el-button>
@@ -57,13 +59,14 @@
           <el-button type="danger" @click="resetForm()">取消</el-button>
         </el-form-item>
       </el-form>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import url from "@/serverConfig.js";
+import { regionData, CodeToText } from "element-china-area-data";
 // import editorBar from "@/components/editor";
 import Editor from "wangeditor";
 import "wangeditor/release/wangEditor.min.css";
@@ -71,19 +74,24 @@ export default {
   data() {
     return {
       leaderData: [],
-      addLeaderVisible: true,
+      addLeaderVisible: false,
       isCreate: true,
       labelWidth: "80px",
       fileList: [],
+      editor: "",
+      areaOptions: regionData,
       leaderForm: {
         id: "",
         name: "",
         tel: "",
         intro: "",
         birthDate: "",
-        pic: []
+        pic: [],
+        addressCode: [],
+        address: "",
+        content: ""
       },
-
+      // 日期选择范围
       pickerOptions1: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -96,7 +104,52 @@ export default {
   },
   mounted() {
     this.editor = new Editor("#editor");
-    this.editor.create();
+    this.editor.customConfig.uploadImgServer =
+      "http://localhost:3000/leader/upload";
+    this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+    this.editor.customConfig.uploadImgHooks = {
+      before: function(xhr, editor, files) {
+        // 图片上传之前触发
+        // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，files 是选择的图片文件
+        // 如果返回的结果是 {prevent: true, msg: 'xxxx'} 则表示用户放弃上传
+        // return {
+        //     prevent: true,
+        //     msg: '放弃上传'
+        // }
+      },
+      success: function(xhr, editor, result) {
+        // 图片上传并返回结果，图片插入成功之后触发
+        // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
+      },
+      fail: function(xhr, editor, result) {
+        // 图片上传并返回结果，但图片插入错误时触发
+        // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
+      },
+      error: function(xhr, editor) {
+        // 图片上传出错时触发
+        // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象
+      },
+      timeout: function(xhr, editor) {
+        // 图片上传超时时触发
+        // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象
+      },
+
+      // 如果服务器端返回的不是 {errno:0, data: [...]} 这种格式，可使用该配置
+      // （但是，服务器端返回的必须是一个 JSON 格式字符串！！！否则会报错）
+      customInsert: function(insertImg, result, editor) {
+        // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
+        // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
+
+        // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
+        console.log(result)
+        for(var i=0;i<result.data.length;i++){
+          var url = result.data[i].filename;
+          insertImg('http://localhost:3000/leader/'+url);
+        }
+        // result 必须是一个 JSON 格式字符串！！！否则报错
+      }
+    };
+    // this.editor.create();
   },
   methods: {
     //   获取领队列表
@@ -157,44 +210,48 @@ export default {
     // 重置表单
     resetForm() {
       this.fileList = [];
-      this.addLeaderVisible = false;
       this.$refs["leaderForm"].resetFields();
       this.$refs["upload"].clearFiles();
+      this.addLeaderVisible = false;
     },
     // 编辑领队
     editLeader(id) {
-      this.isCreate = false;
-      this.leaderForm.id = id;
-      axios({
-        method: "POST",
-        url: url.editLeader,
-        data: {
-          id: id
-        }
-      })
-        .then(res => {
-          if (res.data.code == 200) {
-            let message = res.data.message;
-            this.addLeaderVisible = true;
-            this.leaderForm.name = message.name;
-            this.leaderForm.tel = message.tel;
-            this.leaderForm.birthDate = message.birthDate;
-            this.leaderForm.intro = message.intro;
-            this.leaderForm.pic = message.pic;
-            this.fileList = [
-              {
-                name: message.pic,
-                url: "http://localhost:3000/leader/" + message.pic
-              }
-            ];
-          } else {
-            this.$message.error("查询失败");
-          }
-        })
-        .catch(err => {
-          console.log(err);
-          this.$message.error(err);
-        });
+      this.$router.push({name:'editLeader',params:{id:id,isCreate:0}})
+      // this.isCreate = false;
+      // this.leaderForm.id = id;
+      // axios({
+      //   method: "POST",
+      //   url: url.editLeader,
+      //   data: {
+      //     id: id
+      //   }
+      // })
+      //   .then(res => {
+      //     if (res.data.code == 200) {
+      //       let message = res.data.message;
+      //       console.log(message);
+      //       this.addLeaderVisible = true;
+      //       this.leaderForm.name = message.name;
+      //       this.leaderForm.tel = message.tel;
+      //       this.leaderForm.birthDate = message.birthDate;
+      //       this.leaderForm.intro = message.intro;
+      //       this.leaderForm.pic = message.pic;
+      //       this.leaderForm.addressCode = message.addressCode;
+      //       this.leaderForm.content = message.content;
+      //       this.fileList = [
+      //         {
+      //           name: message.pic,
+      //           url: "http://localhost:3000/leader/" + message.pic
+      //         }
+      //       ];
+      //     } else {
+      //       this.$message.error("查询失败");
+      //     }
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //     this.$message.error(err);
+      //   });
     },
     // 删除领队
     delLeader(id) {
@@ -230,8 +287,22 @@ export default {
         })
         .catch(err => {});
     },
-    addLeaderButton() {
-      this.addLeaderVisible = true;
+    // 地址选择
+    areaChange(value) {
+      console.log(value);
+      this.leaderForm.addressCode = value;
+      this.leaderForm.address =
+        CodeToText[value[0]] +
+        "-" +
+        CodeToText[value[1]] +
+        "-" +
+        CodeToText[value[2]];
+    },
+    // 添加领队按钮
+    addLeaderButton() {      
+      // this.isCreate = true;
+      // this.addLeaderVisible = true;
+       this.$router.push({name:'createLeader',params:{isCreate:1}})
     },
     // 图片上传之前
     beforeAvatarUpload(file) {
@@ -241,9 +312,11 @@ export default {
       }
       return isLt2M;
     },
+    // 选择图片
     handleFile(response) {
       this.fileList.push(response.file);
     },
+    // 移除文件列表内图片
     beforeRemove(file, fileList) {
       var index = this.fileList.indexOf(file);
       this.fileList.splice(index, 1);

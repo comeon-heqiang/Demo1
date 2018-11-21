@@ -33,12 +33,16 @@ router.get('/', async (ctx) => {
 router.post("/addLeader", upload.any("file"), async (ctx) => {
   let body = ctx.req.body;
   let fileName = ctx.req.files[0].filename;
+
   let leaderData = {
     name: body.name,
     tel: body.tel,
     birthDate: body.birthDate,
-    pic: fileName,
+    addressCode: body.addressCode.split(','),
+    address: body.address,
+    pic: fileName || '',
     intro: body.intro,
+    content: body.content,
     createDate: new Date().Format('yyyy-MM-dd hh:mm:ss'),
     updateDate: new Date().Format('yyyy-MM-dd hh:mm:ss')
   };
@@ -84,12 +88,12 @@ router.post("/updateLeader", upload.any("file"), async (ctx) => {
   let fileName = '';
   // let fileName = ctx.req.files[0].filename;  
 
-  console.log(ctx.req)  
+  console.log(ctx.req)
   if (ctx.req.files.length > 0) {
     fileName = ctx.req.files[0].filename
   } else {
- 
-  } 
+
+  }
   let leaderModel = mongoose.model("leader");
   try {
     let result = await leaderModel.update({
@@ -98,15 +102,29 @@ router.post("/updateLeader", upload.any("file"), async (ctx) => {
       $set: {
         name: body.name,
         tel: body.tel,
+        birthDate: body.birthDate,
+        addressCode: body.addressCode.split(','),
+        address: body.address,
+        pic: fileName || '',
         intro: body.intro,
-        birthData: body.birthDate,
-        updateDate: new Date().format("yyyy-MM-dd hh:mm:ss"),
-        url: fileName
+        content: body.content,
+        createDate: new Date().Format('yyyy-MM-dd hh:mm:ss'),
+        updateDate: new Date().Format('yyyy-MM-dd hh:mm:ss')
       }
     });
     ctx.body = info.success('success');
   } catch (error) {
     ctx.body = info.error(error)
   }
+})
+router.post("/upload", upload.any("file"), async (ctx) => {
+  ctx.body = {
+    // errno 即错误代码，0 表示没有错误。
+    //       如果有错误，errno != 0，可通过下文中的监听函数 fail 拿到该错误码进行自定义处理
+    "errno": 0,
+
+    // data 是一个数组，返回若干图片的线上地址
+    "data":ctx.req.files
+}
 })
 module.exports = router;

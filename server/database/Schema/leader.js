@@ -9,6 +9,8 @@ const leaderSchema=new Schema({
         type:String,
         default:""
     },
+    addressCode:Array,
+    address:String,
     pic:String,
     createDate:String,
     updateDate:String,

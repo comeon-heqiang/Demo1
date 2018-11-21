@@ -48,7 +48,7 @@ export default {
         type: "success",
         message: "您已登录"
       });
-        this.$router.push("/");      
+        this.$router.push("/main");      
     }
   },
   mounted() {
