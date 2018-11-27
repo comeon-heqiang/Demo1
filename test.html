@@ -72,6 +72,7 @@
         console.log(this.name);
       }
     }
+
     // b.sayName.call(null);
     // b.sayName();
     window.onload = function () {
@@ -92,7 +93,65 @@
           return result;
         });
       }
+
+      function Gxxy() {
+        name = function () {
+          console.log(1)
+        }
+      }
+      Gxxy.prototype.name = function () {
+        console.log(2)
+      }
+      new Gxxy().name();
+      var a = new Gxxy();
+      a.name()
+
+
+      function fun(n, o) {
+        console.log(o)
+        return {
+          fun: function (m) {
+            return fun(m, n);
+          }
+        };
+      }
+      var a = fun(0);
+
+      a.fun(1); //0
+      a.fun(2); //0
+      a.fun(3); //0
+      var b = fun(0).fun(1).fun(2).fun(3); //undefined,?,?,?
+      var c = fun(0).fun(1);
+      c.fun(2);
+      c.fun(3); //undefined,?,?,?
     }
+
+    // function loadJs(url, callback) {
+    //   var script = document.createElement('script');
+    //   script.type = "text/javascript";
+    //   if (typeof (callback) != "undefined") {
+    //     if (script.readyState) {
+    //       script.onreadystatechange = function () {
+    //         if (script.readyState == "loaded" || script.readyState == "complete") {
+    //           script.onreadystatechange = null;
+    //           callback();
+    //         }
+    //       }
+    //     } else {
+    //       script.onload = function () {
+    //         callback();
+    //       }
+    //     }
+    //   }
+    //   script.src = url;
+    //   document.body.appendChild(script);
+    // }
+    // loadJs("test.js", function () {
+    //   alert('done');
+    // });
+
+
+  
 
   </script>
 </body>

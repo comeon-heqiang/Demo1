@@ -83,20 +83,20 @@ router.post("/editLeader", async (ctx) => {
 
 
 })
+// 更新领队信息
 router.post("/updateLeader", upload.any("file"), async (ctx) => {
   let body = ctx.req.body;
   let fileName = '';
-  // let fileName = ctx.req.files[0].filename;  
 
-  console.log(ctx.req)
-  if (ctx.req.files.length > 0) {
-    fileName = ctx.req.files[0].filename
+  if (body.file) { // 没有更改图片直接提交
+    let fileNames = JSON.parse(body.file);
+    fileName = fileNames[0].name;    
   } else {
-
+    fileName = ctx.req.files[0].filename
   }
   let leaderModel = mongoose.model("leader");
   try {
-    let result = await leaderModel.update({
+    let result = await leaderModel.updateOne({
       _id: body.id
     }, {
       $set: {
@@ -124,7 +124,7 @@ router.post("/upload", upload.any("file"), async (ctx) => {
     "errno": 0,
 
     // data 是一个数组，返回若干图片的线上地址
-    "data":ctx.req.files
-}
+    "data": ctx.req.files
+  }
 })
 module.exports = router;

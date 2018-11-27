@@ -1,38 +1,38 @@
 <template>
-    <div>
-        <!-- 添加领队 -->
-        <el-form :model="leaderForm" ref="leaderForm">
-            <el-form-item label="姓名" :label-width="labelWidth" prop="name">
-                <el-input placeholder="请输入领队名称" v-model="leaderForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="联系方式" :label-width="labelWidth" prop="tel">
-                <el-input placeholder="请输入领队联系方式" v-model.number="leaderForm.tel"></el-input>
-            </el-form-item>
-            <el-form-item label="简介" :label-width="labelWidth" prop="intro">
-                <el-input placeholder="请输入领队简介" v-model="leaderForm.intro"></el-input>
-            </el-form-item>
-            <el-form-item label="出生日期" :label-width="labelWidth" prop="birthDate">
-                <el-date-picker type="date" v-model="leaderForm.birthDate" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" placeholder="选择领队出生日期" :picker-options="pickerOptions1"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="地区" :label-width="labelWidth" prop="addressCode">
-                <el-cascader :options="areaOptions" v-model="leaderForm.addressCode" @change="areaChange"></el-cascader>
-            </el-form-item>
-            <el-form-item label="领队图片" :label-width="labelWidth">
-                <el-upload action="" :http-request="handleFile" list-type="picture-card" ref="upload" accept=".jpg,.jpeg,.png,.JPG,.JPEG" name="file" :file-list="fileList" :limit="1" :on-preview="handlePictureCardPreview" :auto-upload="false" :multiple="true" :before-upload="beforeAvatarUpload" :before-remove="beforeRemove">
-                    <i class="el-icon-plus"></i>
-                </el-upload>
-            </el-form-item>
-            <el-form-item label="详细介绍" :label-width="labelWidth" prop="content">
-                <!-- <editor-bar></editor-bar> -->
-                <div id="editor"></div>
-            </el-form-item>
-            <el-form-item label="" :label-width="labelWidth">
-                <el-button type="primary" @click="submit()" v-if="isCreate">立即创建</el-button>
-                <el-button type="primary" @click="submit()" v-else>立即更新</el-button>
-                <el-button type="danger" @click="resetForm()">取消</el-button>
-            </el-form-item>
-        </el-form>
-    </div>
+  <div>
+    <!-- 添加领队 -->
+    <el-form :model="leaderForm" ref="leaderForm">
+      <el-form-item label="姓名" :label-width="labelWidth" prop="name">
+        <el-input placeholder="请输入领队名称" v-model="leaderForm.name"></el-input>
+      </el-form-item>
+      <el-form-item label="联系方式" :label-width="labelWidth" prop="tel">
+        <el-input placeholder="请输入领队联系方式" v-model.number="leaderForm.tel"></el-input>
+      </el-form-item>
+      <el-form-item label="简介" :label-width="labelWidth" prop="intro">
+        <el-input placeholder="请输入领队简介" v-model="leaderForm.intro"></el-input>
+      </el-form-item>
+      <el-form-item label="出生日期" :label-width="labelWidth" prop="birthDate">
+        <el-date-picker type="date" v-model="leaderForm.birthDate" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" placeholder="选择领队出生日期" :picker-options="pickerOptions1"></el-date-picker>
+      </el-form-item>
+      <el-form-item label="地区" :label-width="labelWidth" prop="addressCode">
+        <el-cascader :options="areaOptions" v-model="leaderForm.addressCode" @change="areaChange"></el-cascader>
+      </el-form-item>
+      <el-form-item label="领队图片" :label-width="labelWidth">
+        <el-upload action="" :http-request="handleFile" list-type="picture-card" ref="upload" accept=".jpg,.jpeg,.png,.JPG,.JPEG" name="file" :file-list="fileList" :limit="1" :on-preview="handlePictureCardPreview" :auto-upload="false" :multiple="true" :before-upload="beforeAvatarUpload" :before-remove="beforeRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="详细介绍" :label-width="labelWidth" prop="content">
+        <!-- <editor-bar></editor-bar> -->
+        <div id="editor"></div>
+      </el-form-item>
+      <el-form-item label="" :label-width="labelWidth">
+        <el-button type="primary" @click="submit()" v-if="isCreate">立即创建</el-button>
+        <el-button type="primary" @click="submit()" v-else>立即更新</el-button>
+        <el-button type="danger" @click="resetForm()">取消</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -75,7 +75,7 @@ export default {
     if (this.$route.params.id) {
       this.leaderForm.id = params.id;
     }
-    this.isCreate = Boolean(params.isCreate);  
+    this.isCreate = Boolean(params.isCreate);
     if (!this.isCreate) {
       this.editLeader();
     }
@@ -132,6 +132,8 @@ export default {
   methods: {
     // 提交
     submit() {
+      console.log(JSON.stringify(this.fileList));
+      //   return;
       this.$refs["leaderForm"].validate(valid => {
         if (valid) {
           let form = this.$refs["leaderForm"].$el;
@@ -140,7 +142,7 @@ export default {
           for (var i in this.leaderForm) {
             formData.append(i, this.leaderForm[i]);
           }
-          formData.append("file", this.fileList);
+          formData.append("file", JSON.stringify(this.fileList));
           let ajaxUrl = url.addLeader;
           let message = "添加成功";
           if (!this.isCreate) {
