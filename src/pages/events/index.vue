@@ -1,14 +1,29 @@
 <template>
   <div class="events">
     <ul>
-      <li v-for="(item,index) in eventsData" :key="index" @click="toArticle(item.id)">
+      <li
+        v-for="(item,index) in eventsData"
+        :key="index"
+        @click="toArticle(item.id)"
+      >
 
-        <img :src="item.thumb" alt="" class="thumb">
+        <img
+          :src="item.thumb"
+          alt=""
+          class="thumb"
+        >
         <template v-if="item.recommend===1">
-          <img src="../../assets/images/icon-tuijian.png" alt="" class="icon-tuijian">
+          <img
+            src="../../assets/images/icon-tuijian.png"
+            alt=""
+            class="icon-tuijian"
+          >
         </template>
         <div class="address">
-          <img src="../../assets/images/icon-address2.png" alt="">
+          <img
+            src="../../assets/images/icon-address2.png"
+            alt=""
+          >
           {{item.address}}
         </div>
         <div class="main">
@@ -16,7 +31,10 @@
             {{item.title}}
           </div>
           <div class="date">
-            <img src="../../assets/images/icon-date.png" alt="">
+            <img
+              src="../../assets/images/icon-date.png"
+              alt=""
+            >
             {{item.date}}
           </div>
           <div class=".price">
@@ -37,8 +55,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import url from "../../WebServerAPI.js";
 export default {
   data() {
     return {
@@ -89,23 +105,8 @@ export default {
       ]
     };
   },
-  created() {
-    this.getEventsList();
-  },
+  created() {},
   methods: {
-    // 获取活动列表
-    getEventsList() {
-      axios({
-        method: "GET",
-        url:url.eventsList,
-        data: {
-          page: this.page,
-          sort: this.sort
-        }
-      }).then(res => {
-        console.log(res);
-      });
-    },
     // 跳转文章详情
 
     toArticle(id) {

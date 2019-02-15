@@ -1,4 +1,4 @@
-let serverUrl = "http://localhost:3000/";
+let serverUrl = "http://localhost:3200/";
 let url = {
   register: serverUrl + 'admin/register', //注册管理员
   login: serverUrl + 'admin/login', //后台登录,
@@ -15,5 +15,4 @@ let url = {
   editLeader:serverUrl+"leader/editLeader", //编辑领队
   updateLeader:serverUrl+"leader/updateLeader", //编辑领队
 }
-
 module.exports = url;

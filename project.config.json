@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 9,
+			"current": 10,
 			"list": [
 				{
 					"id": -1,
@@ -88,7 +88,14 @@
 				{
 					"id": -1,
 					"name": "照片列表",
-					"pathName": "pages/photo/main"
+					"pathName": "pages/photo/main",
+					"query": ""
+				},
+				{
+					"id": 10,
+					"name": "订单详情",
+					"pathName": "pages/orderInfo/main",
+					"query": "id=0&num=1&price=50"
 				}
 			]
 		}

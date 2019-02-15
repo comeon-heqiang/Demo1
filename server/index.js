@@ -33,6 +33,6 @@ app.use(router.allowedMethods())
 
 // 加载中间路由件
 
-app.listen(3000, () => {
-  console.log("你的服务器在3000端口裸奔！")
+app.listen(3200, () => {
+  console.log("你的服务器在3200端口裸奔！")
 })

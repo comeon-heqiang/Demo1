@@ -4,8 +4,7 @@
             <p>
                 <image :src="iconPath" mode="widthFix" />
                 {{title}}
-            </p>
-            <!-- <a :href="navTo" open-type="switchTab" >更多</a>             -->
+            </p>            
             <a :href="navTo" >更多</a>            
         </div>
     </div>

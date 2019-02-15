@@ -11,7 +11,8 @@
     "pages/userCenter/main",
     "pages/myAct/main",
     "pages/setting/main",
-    "pages/aboutUs/main"
+    "pages/aboutUs/main",
+    "pages/orderInfo/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

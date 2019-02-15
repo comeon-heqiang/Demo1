@@ -1,9 +1,24 @@
 <template>
   <div>
-    <swiper :indicator-dots="true" class="banner" :autoplay="true" :interval="5000" :duration="500" :style="{height:bannerSwiperHeight+'px'}">
-      <block v-for="(item,index) in eventInfo.thumb" :key="index">
+    <swiper
+      :indicator-dots="true"
+      class="banner"
+      :autoplay="true"
+      :interval="5000"
+      :duration="500"
+      :style="{height:bannerSwiperHeight+'px'}"
+    >
+      <block
+        v-for="(item,index) in eventInfo.thumb"
+        :key="index"
+      >
         <swiper-item>
-          <image class="swiper-image" :src="item" mode="widthFix" @load="imgOnload" />
+          <image
+            class="swiper-image"
+            :src="item"
+            mode="widthFix"
+            @load="imgOnload"
+          />
         </swiper-item>
       </block>
     </swiper>
@@ -26,14 +41,20 @@
       <ul class="bcw info data-wrap">
         <li>
           <p>
-            <img :src="serverPath+'icon-jihe.png'" alt="">
+            <img
+              :src="serverPath+'icon-jihe.png'"
+              alt=""
+            >
             集合地：
           </p>
           {{eventInfo.startAddress}}
         </li>
         <li>
           <p>
-            <img :src="serverPath+'icon-address4.png'" alt="">
+            <img
+              :src="serverPath+'icon-address4.png'"
+              alt=""
+            >
             目的地：
           </p>
           {{eventInfo.endAddress}}
@@ -41,14 +62,20 @@
         </li>
         <li>
           <p>
-            <img :src="serverPath+'icon-date3.png'" alt="">
+            <img
+              :src="serverPath+'icon-date3.png'"
+              alt=""
+            >
             活动日期：
           </p>
           {{eventInfo.date}}
         </li>
         <li>
           <p>
-            <img :src="serverPath+'icon-duizhang.png'" alt="">
+            <img
+              :src="serverPath+'icon-duizhang.png'"
+              alt=""
+            >
             领队：
           </p>
           {{eventInfo.content}}
@@ -62,13 +89,19 @@
           最近报名：
         </p>
         <ul>
-          <li v-for="(item,index) in users" :key="index">
-            <img :src="serverPath+item.pic" alt="">
+          <li
+            v-for="(item,index) in users"
+            :key="index"
+          >
+            <img
+              :src="serverPath+item.pic"
+              alt=""
+            >
           </li>
         </ul>
       </div>
       <div class="detail p10 bcw">
-          <wx-parse :content="eventInfo.detail"></wx-parse>        
+        <wx-parse :content="eventInfo.detail"></wx-parse>
       </div>
       <!-- 活动推荐 -->
       <div class="recommend p10 bcw">
@@ -78,8 +111,16 @@
           </span>
         </h2>
         <ul>
-          <li v-for="(item,index) in recommendData" :key="index" @click="toArticle(item.id)">
-            <img :src="item.pic" alt="" mode="widthFix">
+          <li
+            v-for="(item,index) in recommendData"
+            :key="index"
+            @click="toArticle(item.id)"
+          >
+            <img
+              :src="item.pic"
+              alt=""
+              mode="widthFix"
+            >
             <div>
               <h2>
                 {{item.title}}
@@ -103,12 +144,22 @@
       </div>
     </div>
     <!-- 报名弹窗 -->
-    <div class="modal-bg" @click="isModelShow=false" :class="isModelShow?'on':''"></div>
-    <div class="events-modal modal bcw" :class="isModelShow?'on':''">
+    <div
+      class="modal-bg"
+      @click="isModelShow=false"
+      :class="isModelShow?'on':''"
+    ></div>
+    <div
+      class="events-modal modal bcw"
+      :class="isModelShow?'on':''"
+    >
       <div class="p10">
 
         <div class="header">
-          <img :src="eventInfo.thumb[0]" alt="">
+          <img
+            :src="eventInfo.thumb[0]"
+            alt=""
+          >
           <div>
             <h3>
               {{eventInfo.title}}
@@ -131,7 +182,10 @@
           </p>
           <div>
             <span @click="changeNum('minus')"></span>
-            <input type="number" v-model.lazy="num" >
+            <input
+              type="number"
+              v-model.lazy="num"
+            >
             <span @click="changeNum('add')"></span>
           </div>
         </div>
@@ -143,7 +197,10 @@
             批次：{{eventInfo.date}}
           </p>
         </div>
-        <div class="btn-buy">
+        <div
+          class="btn-buy"
+          @click="buy"
+        >
           全额付款
           <span>
             ￥{{eventInfo.price*num}}
@@ -156,7 +213,7 @@
 <script>
 import wxParse from "mpvue-wxparse";
 export default {
-  data() {
+  data () {
     return {
       isModelShow: false,
       bannerSwiperHeight: "",
@@ -238,17 +295,17 @@ export default {
       ]
     };
   },
-  onLoad(options) {
+  onLoad (options) {
     this.articleId = options.eventId;
   },
   computed: {
-    serverPath() {
+    serverPath () {
       return this.$serverPath;
     }
   },
-  created() {},
+  created () { },
   methods: {
-    imgOnload(e) {
+    imgOnload (e) {
       var res = wx.getSystemInfoSync(),
         imgWidth = e.mp.detail.width,
         imgHeight = e.mp.detail.height,
@@ -256,13 +313,13 @@ export default {
       this.bannerSwiperHeight = res.windowWidth / radio;
     },
     // 跳转文章详情
-    toArticle(id) {
+    toArticle (id) {
       wx.navigateTo({
         url: "/pages/eventsDetail/main?eventId=" + id
       });
     },
     // 数量改变
-    changeNum(flag) {
+    changeNum (flag) {
       if (flag == "add") {
         this.num++;
       } else if (flag == "minus") {
@@ -275,10 +332,15 @@ export default {
         if (this.num <= 1) {
           this.num = 1;
         } else {
-          // this.num=;
           console.log(flag)
         }
       }
+    },
+    // 去付款
+    buy () {
+      wx.navigateTo({
+        url: '/pages/orderInfo/main?id='+this.eventId+'&num=' + this.num + '&price=' + this.num * this.eventInfo.price
+      })
     }
   },
   components: {
@@ -319,32 +381,7 @@ h2 {
     }
   }
 }
-// 活动地址
-ul.info {
-  li {
-    display: flex;
-    align-items: flex-start;
-    border-bottom: 1px solid #e4e4e4;
-    padding: 10px;
-    line-height: 1.5;
-    font-size: 13px;
 
-    p {
-      min-width: 100px;
-      color: #8c8c8c;
-    }
-    img {
-      width: 25px;
-      height: 25px;
-      margin-right: 5px;
-      vertical-align: middle;
-    }
-    .tel {
-      color: #299fff;
-      margin-left: 10px;
-    }
-  }
-}
 // 最近报名
 .application {
   display: flex;
@@ -481,7 +518,7 @@ ul.info {
   .num {
     display: flex;
     justify-content: space-between;
-  
+
     div {
       display: flex;
       span {
@@ -527,7 +564,7 @@ ul.info {
     align-items: center;
     border-top: 1px solid #cecece;
     background-color: #f6f6f6;
-  
+
     .buy-info {
       flex: 1;
       color: #666;
@@ -544,6 +581,33 @@ ul.info {
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+  }
+}
+
+// 活动地址
+ul.info {
+  li {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #e4e4e4;
+    padding: 10px;
+    line-height: 1.5;
+    font-size: 13px;
+
+    p {
+      min-width: 100px;
+      color: #8c8c8c;
+    }
+    img {
+      width: 25px;
+      height: 25px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    .tel {
+      color: #299fff;
+      margin-left: 10px;
     }
   }
 }
